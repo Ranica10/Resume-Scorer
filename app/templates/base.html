@@ -6,10 +6,45 @@
       {% else %}
       <title>Resume Scorer</title>
       {% endif %}
+
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     </head>
     <body>
-        <div>Resume Scorer: <a href="/index">Home</a></div>
-        <hr>
+        <div class="navbar">
+            <div> <a href="/">
+                <div class="logo">
+                    <div class="logo-img">
+                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_1_326)">
+                            <path d="M10.0833 3.20833L6.1875 7.10417L3.89583 4.8125L0.916666 7.79167" stroke="white" stroke-width="0.916667" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7.33333 3.20833H10.0833V5.95833" stroke="white" stroke-width="0.916667" stroke-linecap="round" stroke-linejoin="round"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_1_326">
+                            <rect width="11" height="11" fill="white"/>
+                            </clipPath>
+                            </defs>
+                        </svg>
+                    </div>
+                    <p class="logo-text">Scored</p>
+                </div>
+            </a> </div>
+
+            <div class="menu">
+                {% for page in pages %}
+                <div class="menu-item">
+                    <a href="{{ page.url }}">{{ page.title }}</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="action-bar">
+                <button class="sign-up-btn">
+                    Sign Up
+                </button>
+            </div>
+        </div>
+        
         {% block content %}{% endblock %}
     </body>
 </html>
