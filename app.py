@@ -1,13 +1,24 @@
 from database import get_db_connection
 
-conn = get_db_connection()
-cursor = conn.cursor(dictionary=True)
+from flask import Flask
 
-cursor.execute("SELECT * FROM occupation_data LIMIT 1")
-rows = cursor.fetchall()
+app = Flask(__name__)
 
-for row in rows:
-    print(row)
+@app.route("/")
+def home():
+    return "Hello world"
 
-cursor.close()
-conn.close()
+
+@app.route("/occupation-data")
+def occupation_data():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM occupation_data LIMIT 10")
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return rows
+    
