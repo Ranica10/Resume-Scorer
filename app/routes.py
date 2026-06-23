@@ -1,9 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 from app.database import get_db_connection # for getting information from database
 
 main = Blueprint("main", __name__)
 
+user = {'username': 'Ranica'}
+
 @main.route("/")
-def home():
-    return "home page"
+def index():
+    return render_template("index.html", title="Home", user=user)
