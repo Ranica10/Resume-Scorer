@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Resume Scorer</title>
+      {% else %}
+      <title>Resume Scorer</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Resume Scorer: <a href="/index">Home</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>

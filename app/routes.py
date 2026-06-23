@@ -4,8 +4,6 @@ from app.database import get_db_connection # for getting information from databa
 
 main = Blueprint("main", __name__)
 
-user = {'username': 'Ranica'}
-
 @main.route("/")
 def index():
-    return render_template("index.html", title="Home", user=user)
+    return render_template("index.html", title="Home")
