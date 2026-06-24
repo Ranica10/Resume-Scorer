@@ -1,5 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>hello world</h1>
+    <div class="hero-section">
+        <div class="hero-content">
+            <div class="tag">
+                <div class="tag-line">
+                    <p class="dot"></p>
+                    <p>AI RESUME ANALYSIS</p>
+                </div>
+            </div>
+
+            <div class="hero-title">
+                <p>Know exactly why you're not getting <span>callbacks.</span></p>
+            </div>
+
+            <div class="hero-desc">
+                <p>Paste your resume and a job posting. Get a score, ranked weaknesses, and line-by-line fixes — in under 10 seconds.</p>
+            </div>
+
+            <div class="hero-actions">
+                <button>Score my resume <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2.91667 7H11.0833" stroke="white" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 2.91669L11.0833 7.00002L7 11.0834" stroke="white" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg></button>
+            </div>
+
+            <div class="stats">
+                <div class="stats-img">
+                    {% for i in range(1, 5) %}
+                        <div class="circle-container">
+                            <div class="circle circle-{{ i }}"> </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="stats-text">
+                    <p><span>{{ total }}</span> resumes scored this month</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-preview">
+            right
+        </div>
+    </div>
 {% endblock %}
