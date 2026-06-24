@@ -303,7 +303,7 @@ button {
 
 .score-card-top {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 1.5rem;
     margin-bottom: 1.25rem;
 }
@@ -319,6 +319,10 @@ button {
 
 .score-ring {
     position: relative;
+
+    svg {
+        overflow: visible;
+    }
 }
 
 .score-ring-label {
