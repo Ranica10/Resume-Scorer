@@ -1,51 +1,125 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="hero-section">
-        <div class="hero-content">
-            <div class="tag">
-                <div class="tag-line">
-                    <p class="dot"></p>
-                    <p>AI RESUME ANALYSIS</p>
-                </div>
-            </div>
-
-            <div class="hero-title">
-                <p>Know exactly why you're not getting <span>callbacks.</span></p>
-            </div>
-
-            <div class="hero-desc">
-                <p>Paste your resume and a job posting. Get a score, ranked weaknesses, and line-by-line fixes — in under 10 seconds.</p>
-            </div>
-
-            <div class="hero-actions">
-                <button class="btn-primary-lg" onclick="document.getElementById('upload-zone').scrollIntoView({behavior:'smooth'})">
-                  Score my resume
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <path d="M2.91667 7H11.0833" stroke="#000" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 2.91669L11.0833 7.00002L7 11.0834" stroke="#000" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </button>
-                <span class="no-signup">No sign-up needed</span>
-              </div>
-
-            <div class="stats">
-                <div class="stats-img">
-                    {% for i in range(1, 5) %}
-                        <div class="circle-container">
-                            <div class="circle circle-{{ i }}"> </div>
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <div class="stats-text">
-                    <p><span>{{ total }}</span> resumes scored this month</p>
-                </div>
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="tag">
+            <div class="tag-line">
+                <p class="dot"></p>
+                <p>AI RESUME ANALYSIS</p>
             </div>
         </div>
 
-        <div class="hero-preview">
-            right
+        <div class="hero-title">
+            <p>Know exactly why you're not getting <span>callbacks.</span></p>
+        </div>
+
+        <div class="hero-desc">
+            <p>Paste your resume and a job posting. Get a score, ranked weaknesses, and line-by-line fixes — in under 10
+                seconds.</p>
+        </div>
+
+        <div class="hero-actions">
+            <button class="btn-primary-lg"
+                onclick="document.getElementById('upload-zone').scrollIntoView({behavior:'smooth'})">
+                Score my resume
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2.91667 7H11.0833" stroke="#000" stroke-width="1.2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M7 2.91669L11.0833 7.00002L7 11.0834" stroke="#000" stroke-width="1.2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <span class="no-signup">No sign-up needed</span>
+        </div>
+
+        <div class="stats">
+            <div class="stats-img">
+                {% for i in range(1, 5) %}
+                <div class="circle-container">
+                    <div class="circle circle-{{ i }}"> </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="stats-text">
+                <p><span>{{ total }}</span> resumes scored this month</p>
+            </div>
         </div>
     </div>
+
+
+    <!-- Hero Score Card -->
+    <div class="hero-preview">
+        <div class="score-card-top">
+            <div>
+                <p class="card-eyebrow">Overall score</p>
+                <div class="score-ring" style="width:120px; height:120px;">
+                    <svg width="120" height="120" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8" />
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="#00ff87" stroke-width="8"
+                            stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="88.22"
+                            transform="rotate(-90 60 60)"
+                            style="transition: stroke-dashoffset 1s ease; filter: drop-shadow(0 0 6px rgba(0,255,135,0.5));" />
+                    </svg>
+                    
+                    <div class="score-ring-label">
+                        <span class="score-num">73</span>
+                        <span class="score-lbl">Score</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-bars">
+                <div class="cat-row">
+                    <span class="cat-name">ATS Match</span>
+                    <div class="cat-track">
+                        <div class="cat-fill green" style="width:82%"></div>
+                    </div>
+                    <span class="cat-val green">82</span>
+                </div>
+                <div class="cat-row">
+                    <span class="cat-name">Skills</span>
+                    <div class="cat-track">
+                        <div class="cat-fill red" style="width:38%"></div>
+                    </div>
+                    <span class="cat-val red">38</span>
+                </div>
+                <div class="cat-row">
+                    <span class="cat-name">Impact</span>
+                    <div class="cat-track">
+                        <div class="cat-fill amber" style="width:61%"></div>
+                    </div>
+                    <span class="cat-val amber">61</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="feedback-card">
+            <div class="feedback-file">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+                resume_peter_2024.pdf
+            </div>
+            <div class="feedback-block">
+                <div class="feedback-line-num">// Line 7</div>
+                <div class="feedback-old">"Responsible for improving team velocity"</div>
+                <div class="feedback-new">"Raised sprint velocity 34% by introducing automated regression tests, cutting
+                    QA cycles from 5 days to 2"</div>
+            </div>
+            <div class="feedback-block">
+                <div class="feedback-line-num">// Missing keywords</div>
+                <div class="kw-list">
+                    <span class="kw-tag">+ Kubernetes</span>
+                    <span class="kw-tag">+ CI/CD</span>
+                    <span class="kw-tag">+ observability</span>
+                    <span class="kw-tag">+ SLO</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
