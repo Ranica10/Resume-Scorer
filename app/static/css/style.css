@@ -771,3 +771,96 @@ button {
     letter-spacing: 0.04em;
     cursor: default;
 }
+
+
+/* ── Upload ── */
+.upload-section {
+    padding: 5rem 0;
+    background: var(--bg);
+}
+
+.upload-center {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.upload-headline {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 3vw, 2.4rem);
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin-bottom: 0.5rem;
+}
+
+.upload-sub {
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: 2rem;
+}
+
+.dropzone {
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 3rem;
+    cursor: pointer;
+    background: var(--bg-card);
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.dropzone:hover {
+    border-color: var(--accent);
+    background: rgba(0, 255, 135, 0.04);
+    box-shadow: 0 0 24px rgba(0, 255, 135, 0.08);
+}
+
+.dropzone-icon {
+    margin: 0 auto 14px;
+    color: var(--fg-muted);
+}
+
+.dropzone-title {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fg);
+    margin-bottom: 6px;
+}
+
+.dropzone-sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-muted);
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.upload-action {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+}
+
+.dropzone.file-selected {
+    border-color: var(--accent);
+    background: rgba(0, 255, 135, 0.06);
+    box-shadow: 0 0 24px rgba(0, 255, 135, 0.1);
+}
+
+.dropzone.file-selected .dropzone-icon {
+    color: var(--accent);
+}
+
+.dropzone.file-selected .dropzone-title {
+    color: var(--accent);
+}
+
+.dropzone.drag-over {
+    border-color: var(--accent);
+    background: rgba(0, 255, 135, 0.08);
+    box-shadow: 0 0 24px rgba(0, 255, 135, 0.12);
+}
