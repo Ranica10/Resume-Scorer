@@ -307,6 +307,84 @@ body {
     opacity: 0.6;
 }
 
+/* ─────────────────────────────────────────────
+   Job Title Suggestions Dropdown
+───────────────────────────────────────────── */
+
+.suggestion-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.suggestions-box {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 50;
+
+    background: var(--bg3);
+    border: 1px solid rgba(0, 255, 135, 0.25);
+    border-radius: 8px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
+                0 0 18px rgba(0, 255, 135, 0.08);
+
+    overflow: hidden;
+    display: none;
+}
+
+.suggestions-box.show {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 11px 13px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fgm);
+
+    background: rgba(255, 255, 255, 0.025);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease, padding-left 0.12s ease;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: rgba(0, 255, 135, 0.08);
+    color: var(--grn);
+    padding-left: 17px;
+}
+
+.suggestion-item.active {
+    background: rgba(0, 255, 135, 0.1);
+    color: var(--grn);
+}
+
+.suggestion-item .suggestion-main {
+    display: block;
+    color: inherit;
+}
+
+.suggestion-item .suggestion-tag {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--fgm);
+    opacity: 0.75;
+}
+
+.suggestion-item:hover .suggestion-tag,
+.suggestion-item.active .suggestion-tag {
+    color: var(--grn);
+    opacity: 0.75;
+}
+
 input[type=text],
 textarea,
 select {

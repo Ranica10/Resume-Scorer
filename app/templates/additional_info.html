@@ -74,8 +74,30 @@
                 <div class="card-body">
                     <div>
                         <div class="field-label">Job title <span class="req">*</span></div>
-                        <input type="text" id="job-title" name="target_role"
-                            placeholder="e.g. Senior Software Engineer, Product Manager…" required />
+                        <div class="suggestion-wrap">
+                            <input type="text" id="job-title" name="target_role"
+                                placeholder="e.g. Senior Software Engineer, Product Manager…" autocomplete="off"
+                                required />
+
+                            <div class="suggestions-box" id="suggestions-box"></div>
+                        </div>
+
+                        <datalist id="job-title-suggestions">
+                            <option value="Software Engineer Intern">
+                            <option value="Frontend Developer">
+                            <option value="Backend Developer">
+                            <option value="Full Stack Developer">
+                            <option value="Data Analyst">
+                            <option value="Data Scientist">
+                            <option value="Machine Learning Engineer">
+                            <option value="Product Manager">
+                            <option value="Business Analyst">
+                            <option value="Marketing Coordinator">
+                            <option value="UX Designer">
+                            <option value="Project Manager">
+                            <option value="Financial Analyst">
+                            <option value="Software Developer">
+                        </datalist>
                     </div>
 
                     <div>
@@ -269,17 +291,47 @@
 <script>
     const roleTypeInput = document.getElementById("role-type-input");
     const experienceLevelInput = document.getElementById("experience-level-input");
+    const jobTitleInput = document.getElementById("job-title");
+    const suggestionsBox = document.getElementById("suggestions-box");
+
+    const jobSuggestions = [
+        { title: "Software Engineer Intern", tag: "Engineering", role: "engineering" },
+        { title: "Software Developer", tag: "Engineering", role: "engineering" },
+        { title: "Frontend Developer", tag: "Engineering", role: "engineering" },
+        { title: "Backend Developer", tag: "Engineering", role: "engineering" },
+        { title: "Full Stack Developer", tag: "Engineering", role: "engineering" },
+        { title: "Product Manager", tag: "Product", role: "product" },
+        { title: "Associate Product Manager", tag: "Product", role: "product" },
+        { title: "Business Analyst", tag: "Product", role: "product" },
+        { title: "UX Designer", tag: "Design", role: "design" },
+        { title: "UI Designer", tag: "Design", role: "design" },
+        { title: "Product Designer", tag: "Design", role: "design" },
+        { title: "Data Analyst", tag: "Data / ML", role: "data_ml" },
+        { title: "Data Scientist", tag: "Data / ML", role: "data_ml" },
+        { title: "Machine Learning Engineer", tag: "Data / ML", role: "data_ml" },
+        { title: "AI Engineer", tag: "Data / ML", role: "data_ml" },
+        { title: "Marketing Coordinator", tag: "Marketing", role: "marketing" },
+        { title: "Digital Marketing Specialist", tag: "Marketing", role: "marketing" },
+        { title: "Financial Analyst", tag: "Other", role: "other" },
+        { title: "Project Manager", tag: "Other", role: "other" }
+    ];
+
+    function selectRole(role) {
+        document.querySelectorAll(".role-chip").forEach(chip => {
+            chip.classList.remove("selected");
+
+            if (chip.dataset.val === role) {
+                chip.classList.add("selected");
+                roleTypeInput.value = role;
+            }
+        });
+    }
 
     document.getElementById("role-grid").addEventListener("click", e => {
         const chip = e.target.closest(".role-chip");
         if (!chip) return;
 
-        document.querySelectorAll(".role-chip").forEach(c => {
-            c.classList.remove("selected");
-        });
-
-        chip.classList.add("selected");
-        roleTypeInput.value = chip.dataset.val;
+        selectRole(chip.dataset.val);
     });
 
     document.getElementById("lvl-track").addEventListener("click", e => {
@@ -292,6 +344,58 @@
 
         btn.classList.add("active");
         experienceLevelInput.value = btn.dataset.lvl;
+    });
+
+    jobTitleInput.addEventListener("input", () => {
+        const value = jobTitleInput.value.toLowerCase().trim();
+
+        suggestionsBox.innerHTML = "";
+
+        if (!value) {
+            suggestionsBox.classList.remove("show");
+            return;
+        }
+
+        const matches = jobSuggestions
+            .filter(item => item.title.toLowerCase().includes(value))
+            .slice(0, 6);
+
+        if (matches.length === 0) {
+            suggestionsBox.classList.remove("show");
+            return;
+        }
+
+        matches.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "suggestion-item";
+
+            div.innerHTML = `
+                <span class="suggestion-main">${item.title}</span>
+                <span class="suggestion-tag">${item.tag}</span>
+            `;
+
+            div.addEventListener("click", () => {
+                jobTitleInput.value = item.title;
+                suggestionsBox.classList.remove("show");
+                selectRole(item.role);
+            });
+
+            suggestionsBox.appendChild(div);
+        });
+
+        suggestionsBox.classList.add("show");
+    });
+
+    jobTitleInput.addEventListener("keydown", e => {
+        if (e.key === "Escape") {
+            suggestionsBox.classList.remove("show");
+        }
+    });
+
+    document.addEventListener("click", e => {
+        if (!e.target.closest(".suggestion-wrap")) {
+            suggestionsBox.classList.remove("show");
+        }
     });
 
     function updateCount(el) {
