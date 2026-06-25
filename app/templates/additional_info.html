@@ -1,0 +1,301 @@
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/additional-info.css') }}">
+</head>
+
+<form method="POST" action="{{ url_for('main.analyze_resume') }}">
+    <input type="hidden" id="role-type-input" name="role_type" value="engineering">
+    <input type="hidden" id="experience-level-input" name="experience_level" value="3">
+
+    <div class="page">
+
+        <div class="topbar">
+            <div class="topbar-logo">
+                <div class="logo-dot">
+                    <svg width="10" height="10" viewBox="0 0 11 11" fill="none">
+                        <path d="M10.083 3.208L6.188 7.104 3.896 4.813.917 7.792" stroke="#000" stroke-width="0.917"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7.333 3.208H10.083V5.958" stroke="#000" stroke-width="0.917" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+                Scored
+            </div>
+
+            <div class="topbar-steps">
+                <div class="step done">
+                    <span class="step-num">
+                        <i class="ti ti-check" style="font-size:10px"></i>
+                    </span>
+                    <span class="step-label">Upload</span>
+                </div>
+
+                <span class="step-sep">›</span>
+
+                <div class="step active">
+                    <span class="step-num">2</span>
+                    <span class="step-label">Your info</span>
+                </div>
+
+                <span class="step-sep">›</span>
+
+                <div class="step todo">
+                    <span class="step-num">3</span>
+                    <span class="step-label">Results</span>
+                </div>
+            </div>
+
+            <div style="width:80px"></div>
+        </div>
+
+        <div class="stage-band">
+            <div class="stage-band-inner">
+                <div>
+                    <div class="stage-eyebrow">STAGE 2 OF 3</div>
+                    <div class="stage-title">Tell us what you're <em>targeting.</em></div>
+                    <div class="stage-sub">Takes 30 seconds. Doubles the accuracy of your score.</div>
+                </div>
+
+                <div class="file-pill">
+                    <i class="ti ti-file-check" aria-hidden="true"></i>
+                    {{ resume_name }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-body">
+
+            <div class="arcade-card">
+                <div class="card-hdr">
+                    <i class="ti ti-crosshair card-hdr-icon" aria-hidden="true"></i>
+                    <span class="card-hdr-title">TARGET ROLE</span>
+                    <span class="card-hdr-badge">REQUIRED</span>
+                </div>
+
+                <div class="card-body">
+                    <div>
+                        <div class="field-label">Job title <span class="req">*</span></div>
+                        <input type="text" id="job-title" name="target_role"
+                            placeholder="e.g. Senior Software Engineer, Product Manager…" required />
+                    </div>
+
+                    <div>
+                        <div class="field-label">Role type</div>
+
+                        <div class="role-grid" id="role-grid">
+                            <div class="role-chip selected" data-val="engineering">
+                                <i class="ti ti-code" aria-hidden="true"></i>
+                                Engineering
+                                <span class="rc-dot"></span>
+                            </div>
+
+                            <div class="role-chip" data-val="product">
+                                <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+                                Product
+                                <span class="rc-dot"></span>
+                            </div>
+
+                            <div class="role-chip" data-val="design">
+                                <i class="ti ti-brush" aria-hidden="true"></i>
+                                Design
+                                <span class="rc-dot"></span>
+                            </div>
+
+                            <div class="role-chip" data-val="data_ml">
+                                <i class="ti ti-chart-dots" aria-hidden="true"></i>
+                                Data / ML
+                                <span class="rc-dot"></span>
+                            </div>
+
+                            <div class="role-chip" data-val="marketing">
+                                <i class="ti ti-speakerphone" aria-hidden="true"></i>
+                                Marketing
+                                <span class="rc-dot"></span>
+                            </div>
+
+                            <div class="role-chip" data-val="other">
+                                <i class="ti ti-dots" aria-hidden="true"></i>
+                                Other
+                                <span class="rc-dot"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arcade-card">
+                <div class="card-hdr">
+                    <i class="ti ti-award card-hdr-icon" aria-hidden="true"></i>
+                    <span class="card-hdr-title">EXPERIENCE LEVEL</span>
+                    <span class="card-hdr-badge">REQUIRED</span>
+                </div>
+
+                <div class="card-body">
+                    <div>
+                        <div class="field-label">Select your level <span class="req">*</span></div>
+
+                        <div class="level-track" id="lvl-track">
+                            <div class="lvl-btn" data-lvl="1">
+                                <span class="lvl-btn-tag">LVL 1</span>
+                                <span class="lvl-btn-label">Entry</span>
+                                <div class="px-mini">
+                                    <div class="p p-on"></div>
+                                    <div class="p p-off"></div>
+                                    <div class="p p-off"></div>
+                                    <div class="p p-off"></div>
+                                    <div class="p p-off"></div>
+                                </div>
+                            </div>
+
+                            <div class="lvl-btn" data-lvl="2">
+                                <span class="lvl-btn-tag">LVL 2</span>
+                                <span class="lvl-btn-label">Mid</span>
+                                <div class="px-mini">
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-off"></div>
+                                    <div class="p p-off"></div>
+                                    <div class="p p-off"></div>
+                                </div>
+                            </div>
+
+                            <div class="lvl-btn active" data-lvl="3">
+                                <span class="lvl-btn-tag">LVL 3</span>
+                                <span class="lvl-btn-label">Senior</span>
+                                <div class="px-mini">
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-off"></div>
+                                    <div class="p p-off"></div>
+                                </div>
+                            </div>
+
+                            <div class="lvl-btn" data-lvl="4">
+                                <span class="lvl-btn-tag">LVL 4</span>
+                                <span class="lvl-btn-label">Staff</span>
+                                <div class="px-mini">
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-off"></div>
+                                </div>
+                            </div>
+
+                            <div class="lvl-btn" data-lvl="5">
+                                <span class="lvl-btn-tag">LVL 5</span>
+                                <span class="lvl-btn-label">Principal+</span>
+                                <div class="px-mini">
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                    <div class="p p-on"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arcade-card">
+                <div class="card-hdr">
+                    <i class="ti ti-file-description card-hdr-icon" aria-hidden="true"></i>
+                    <span class="card-hdr-title">JOB DESCRIPTION</span>
+                    <span class="card-hdr-badge"
+                        style="background:rgba(245,166,35,0.08);color:var(--amb);border-color:rgba(245,166,35,0.25);">
+                        OPTIONAL
+                    </span>
+                </div>
+
+                <div class="card-body">
+                    <div class="jd-wrap">
+                        <div class="field-label">
+                            Paste the job description
+                            <span class="opt">— optional but recommended</span>
+                        </div>
+
+                        <textarea id="jd-text" name="job_description"
+                            placeholder="Paste the full job description here. We'll cross-reference every requirement, preferred skill, and keyword against your resume…"
+                            oninput="updateCount(this)"></textarea>
+
+                        <div class="jd-hint">
+                            <i class="ti ti-bolt" aria-hidden="true"></i>
+                            Adding a JD boosts score precision by up to 40%
+                            <span class="char-count" id="char-count">0 chars</span>
+                        </div>
+                    </div>
+
+                    <div class="divider-or"><span>or</span></div>
+
+                    <div>
+                        <div class="field-label">Paste a job URL</div>
+
+                        <div class="paste-url">
+                            <input type="text" name="job_url" placeholder="https://linkedin.com/jobs/view/…" />
+
+                            <button type="button">
+                                <i class="ti ti-world" style="font-size:13px;vertical-align:-2px;margin-right:5px"
+                                    aria-hidden="true"></i>
+                                Fetch JD
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="action-row">
+            <a class="btn-back" href="{{ url_for('main.index') }}">
+                <i class="ti ti-arrow-left" style="font-size:13px" aria-hidden="true"></i>
+                Back
+            </a>
+
+            <button type="submit" class="btn-analyze">
+                <i class="ti ti-cpu" aria-hidden="true"></i>
+                Analyze my resume
+            </button>
+        </div>
+
+        <div class="score-preview">
+            <i class="ti ti-info-circle" aria-hidden="true"></i>
+            Scoring takes ~8 seconds — you'll see results immediately after.
+        </div>
+
+    </div>
+</form>
+
+<script>
+    const roleTypeInput = document.getElementById("role-type-input");
+    const experienceLevelInput = document.getElementById("experience-level-input");
+
+    document.getElementById("role-grid").addEventListener("click", e => {
+        const chip = e.target.closest(".role-chip");
+        if (!chip) return;
+
+        document.querySelectorAll(".role-chip").forEach(c => {
+            c.classList.remove("selected");
+        });
+
+        chip.classList.add("selected");
+        roleTypeInput.value = chip.dataset.val;
+    });
+
+    document.getElementById("lvl-track").addEventListener("click", e => {
+        const btn = e.target.closest(".lvl-btn");
+        if (!btn) return;
+
+        document.querySelectorAll(".lvl-btn").forEach(b => {
+            b.classList.remove("active");
+        });
+
+        btn.classList.add("active");
+        experienceLevelInput.value = btn.dataset.lvl;
+    });
+
+    function updateCount(el) {
+        document.getElementById("char-count").textContent =
+            el.value.length.toLocaleString() + " chars";
+    }
+</script>
