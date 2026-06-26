@@ -219,7 +219,7 @@ body {
     background: var(--bg3);
     border: 1px solid rgba(0, 255, 135, 0.15);
     border-radius: 10px;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
 }
 
@@ -330,12 +330,42 @@ body {
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35),
                 0 0 18px rgba(0, 255, 135, 0.08);
 
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 260px;
+
     display: none;
+}
+
+.suggestions-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.suggestions-box::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.suggestions-box::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 135, 0.35);
+    border-radius: 999px;
+}
+
+.suggestions-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 135, 0.55);
 }
 
 .suggestions-box.show {
     display: block;
+}
+
+.suggestion-match {
+    color: var(--fg);
+    font-weight: 600;
+}
+
+.suggestion-item:hover .suggestion-match {
+    color: inherit;
+    font-weight: inherit;
 }
 
 .suggestion-item {
@@ -369,20 +399,6 @@ body {
 .suggestion-item .suggestion-main {
     display: block;
     color: inherit;
-}
-
-.suggestion-item .suggestion-tag {
-    display: block;
-    margin-top: 3px;
-    font-size: 10px;
-    color: var(--fgm);
-    opacity: 0.75;
-}
-
-.suggestion-item:hover .suggestion-tag,
-.suggestion-item.active .suggestion-tag {
-    color: var(--grn);
-    opacity: 0.75;
 }
 
 input[type=text],

@@ -47,6 +47,14 @@ def upload_resume():
 
     return redirect(url_for("main.additional_info"))
 
+def get_job_titles():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM job_titles")
+    titles = cursor.fetchall()
+
+    return titles
 
 @main.route("/additional-info", methods=["GET"])
 def additional_info():
@@ -56,7 +64,8 @@ def additional_info():
     return render_template(
         "additional_info.html",
         title="Additional Info",
-        resume_name=session.get("resume_original_name")
+        resume_name=session.get("resume_original_name"),
+        job_titles=get_job_titles()
     )
 
 
