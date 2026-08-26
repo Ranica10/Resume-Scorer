@@ -1,9 +1,18 @@
 import { useState } from "react"
+import FileUploader from "~/components/FileUploader";
 import Navbar from "~/components/Navbar"
 
 const upload = () => {
   const [ isProcessing, setIsProcessing ] = useState(false);
   const [statusText, setStatusText] = useState("")
+
+  // State to hold the selected file
+  const [file, setFile] = useState<File | null>(null);
+
+  // Handle file selection from the FileUploader component
+  const handleFileSelect = (file: File | null) => {
+    setFile(file);
+  }
 
   const handleSubmit = ((e: FormEvent<HTMLFormElement>)=> {
     
@@ -54,9 +63,10 @@ const upload = () => {
                   {/* Dropbox for resume */}
                   <div className="form-div">
                     <label htmlFor="uploader">Upload Resume</label>
-                    <div>Uploader</div>
+                      <FileUploader onFileSelect={handleFileSelect} />
                   </div>
 
+                  {/* Submit button */}
                   <button className="primary-button" type="submit">Analyze Resume</button>
                 </form>
               )}
