@@ -51,7 +51,7 @@ const upload = () => {
       return setStatusText("[ERR]: Failed to convert PDF to image :(")
     }
 
-    setStatusText("Uploading to image...");
+    setStatusText("Uploading image...");
     // Upload the img to puter storage
     const uploadedImage = await fs.upload([imageFile.file])
 
@@ -70,9 +70,11 @@ const upload = () => {
       id: uuid,
       resumePath: uploadedFile.path,
       imagePath: uploadedImage.path,
-      companyName, jobTitle, jobDescription,
-      feedback: ""
-    }
+      companyName,
+      jobTitle,
+      jobDescription,
+      feedback: {},
+    };
 
     // Store in puter
     await kv.set(`resume:${uuid}`, JSON.stringify(data))
@@ -81,7 +83,7 @@ const upload = () => {
 
     // Use puter ai for the resume feedback
     const feedback = await ai.feedback(
-      uploadedFile.path,
+      uploadedImage.path,
       prepareInstructions({ jobTitle, jobDescription }) // use the prepared instructions to give to the ai
     )
 
@@ -93,7 +95,7 @@ const upload = () => {
     // Get the actual feedback text from the ai response
     const feedbackText = typeof feedback.message.content === "string"
       ? feedback.message.content
-      : feedback.message.content[0].text;
+      : feedback.message.content[0];
 
     // Update the data with the feedback
     data.feedback = JSON.parse(feedbackText)
