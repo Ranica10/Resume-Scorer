@@ -1,7 +1,6 @@
 import { useState, type FormEvent } from "react";
 import FileUploader from "~/components/FileUploader";
 import Navbar from "~/components/Navbar";
-import { convertPdfToImage } from "~/lib/pdf2img";
 
 import {
   RedirectToSignIn,
@@ -10,6 +9,11 @@ import {
 
 import { useSession, useUser } from "@clerk/react-router";
 import { createClerkSupabaseClient } from "~/lib/supabase";
+
+import { GoogleGenAI } from "@google/genai";
+
+import { prepareInstructions } from "~/constants";
+import { convertPdfToText } from "~/lib/pdf2txt";
 
 function UploadPage() {
   const { user } = useUser();
@@ -47,7 +51,6 @@ function UploadPage() {
 
     // File pathes for the current resume
     const resumePath = `${user.id}/${resumeId}.pdf`;
-    const imagePath = `${user.id}/${resumeId}.png`;
 
     // Upload the resume to the resumes bucket in supabase
     const { error: resumeUploadError } = await supabase.storage
@@ -61,25 +64,35 @@ function UploadPage() {
       throw resumeUploadError;
     }
 
-    setStatusText("Creating image...");
+    setStatusText("Extracting text...");
 
-    const imageFile = await convertPdfToImage(file);
+    const resumeText = await convertPdfToText(file);
 
-    if (!imageFile.file) {
-      throw new Error("Could not generate resume preview");
+    if (!resumeText) {
+      throw new Error("Could not extract text");
     }
 
-    // Upload the image of the resume to the resume-images bucket in supabase
-    const { error: imageUploadError } = await supabase.storage
-      .from("resume-images")
-      .upload(imagePath, imageFile.file, {
-        contentType: "image/png",
-        upsert: false,
-      });
+    console.log("Extracted text:", resumeText);
 
-    if (imageUploadError) {
-      throw imageUploadError;
-    }
+    // Analyze the resume with Ollama
+    setStatusText("Analyzing resume...");
+
+    const ai = new GoogleGenAI({
+      apiKey: import.meta.env.VITE_GEMINI_API_KEY,
+    });
+
+    const interaction = await ai.interactions.create({
+      model: "gemini-3.1-flash-lite",
+      input: prepareInstructions({
+        jobTitle,
+        jobDescription,
+        resumeText
+      }),
+    });
+
+    const feedback = JSON.parse(interaction.output_text || "{}");
+
+    console.log("Feedback received:", feedback);
 
     setStatusText("Saving resume...");
 
@@ -96,9 +109,9 @@ function UploadPage() {
         job_description: jobDescription,
 
         resume_path: resumePath,
-        image_path: imagePath,
+        resume_text: resumeText,
 
-        feedback: null, // later w/ ollama
+        feedback: feedback
       })
       .select()
       .single();
@@ -116,8 +129,20 @@ function UploadPage() {
       return;
     }
 
+    // Get form data
+    const formData = new FormData(e.currentTarget);
+
+    const companyName = formData.get("company-name") as string;
+    const jobTitle = formData.get("job-title") as string;
+    const jobDescription = formData.get("job-description") as string;
+
     try {
-      await handleAnalyze({ file });
+      // Analyze the resume and save it to the database
+      await handleAnalyze({
+        companyName,
+        jobTitle,
+        jobDescription,
+      });
     } catch (error) {
       console.error("Resume preparation failed:", error);
       setStatusText("[ERR]: Resume preparation failed. Please try again.");
