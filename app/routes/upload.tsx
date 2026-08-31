@@ -13,7 +13,8 @@ import { createClerkSupabaseClient } from "~/lib/supabase";
 import { GoogleGenAI } from "@google/genai";
 
 import { prepareInstructions } from "~/constants";
-import { convertPdfToText } from "~/lib/pdf2txt";
+import { convertPdfToImage, convertPdfToText } from "~/lib/pdf";
+import { useNavigate } from "react-router";
 
 function UploadPage() {
   const { user } = useUser();
@@ -22,6 +23,8 @@ function UploadPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  const navigate = useNavigate();
 
   const handleFileSelect = (selectedFile: File | null) => {
     setFile(selectedFile);
@@ -51,6 +54,7 @@ function UploadPage() {
 
     // File pathes for the current resume
     const resumePath = `${user.id}/${resumeId}.pdf`;
+    const imagePath = `${user.id}/${resumeId}.png`;
 
     // Upload the resume to the resumes bucket in supabase
     const { error: resumeUploadError } = await supabase.storage
@@ -64,6 +68,27 @@ function UploadPage() {
       throw resumeUploadError;
     }
 
+    // Convert the PDF to an image and upload it to the images bucket in supabase
+    setStatusText("Creating image...");
+
+    const imageFile = await convertPdfToImage(file);
+
+    if (!imageFile.file) {
+      throw new Error("Could not generate resume preview");
+    }
+
+    // Upload the image of the resume to the resume-images bucket in supabase
+    const { error: imageUploadError } = await supabase.storage
+      .from("resume-images")
+      .upload(imagePath, imageFile.file, {
+        contentType: "image/png",
+        upsert: false,
+      });
+
+    if (imageUploadError) {
+      throw imageUploadError;
+    }
+
     setStatusText("Extracting text...");
 
     const resumeText = await convertPdfToText(file);
@@ -72,9 +97,9 @@ function UploadPage() {
       throw new Error("Could not extract text");
     }
 
-    console.log("Extracted text:", resumeText);
+    // console.log("Extracted text:", resumeText);
 
-    // Analyze the resume with Ollama
+    // Analyze the resume with gemini-3.1-flash-lite and get feedback
     setStatusText("Analyzing resume...");
 
     const ai = new GoogleGenAI({
@@ -92,7 +117,7 @@ function UploadPage() {
 
     const feedback = JSON.parse(interaction.output_text || "{}");
 
-    console.log("Feedback received:", feedback);
+    // console.log("Feedback received:", feedback);
 
     setStatusText("Saving resume...");
 
@@ -110,6 +135,7 @@ function UploadPage() {
 
         resume_path: resumePath,
         resume_text: resumeText,
+        image_path: imagePath,
 
         feedback: feedback
       })
@@ -119,6 +145,9 @@ function UploadPage() {
     if (insertError) {
       throw insertError;
     }
+
+    // Navigate to the resume page w/ the feedback displayed
+    navigate(`/resume/${resumeId}`);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
