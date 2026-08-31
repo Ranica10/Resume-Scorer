@@ -1,126 +1,43 @@
-import { useState, type FormEvent } from "react"
-import { useNavigate } from "react-router";
+import { useState, type FormEvent } from "react";
 import FileUploader from "~/components/FileUploader";
-import Navbar from "~/components/Navbar"
-import { prepareInstructions } from "~/constants";
+import Navbar from "~/components/Navbar";
 import { convertPdfToImage } from "~/lib/pdf2img";
-import { usePuterStore } from "~/lib/puter";
-import { generateUUID } from "~/lib/utils";
 
-const upload = () => {
-  // fs = file storage, kv = key-value storage functions
-  const { auth, isLoading, fs, ai, kv } = usePuterStore();
-
-  const navigate = useNavigate();
-
+const Upload = () => {
   const [isProcessing, setIsProcessing] = useState(false);
-  const [statusText, setStatusText] = useState("")
-
-  // State to hold the selected file
+  const [statusText, setStatusText] = useState("");
   const [file, setFile] = useState<File | null>(null);
 
-  // Handle file selection from the FileUploader component
-  const handleFileSelect = (file: File | null) => {
-    setFile(file);
-  }
+  const handleFileSelect = (selectedFile: File | null) => {
+    setFile(selectedFile);
+  };
 
-  // Analyze the resume w/ the provided info in the form
-  const handleAnalyze = async ({ companyName, jobTitle, jobDescription, file }: {
-    companyName: string,
-    jobTitle: string,
-    jobDescription: string,
-    file: File
-  }) => {
+  const handleAnalyze = async ({ file }: { file: File }) => {
     setIsProcessing(true);
+    setStatusText("Preparing resume...");
 
-    setStatusText("Uploading the file...")
-    // get the uploaded resume
-    const uploadedFile = await fs.upload([file])
-
-    if (!uploadedFile) {
-      setIsProcessing(false)
-      return setStatusText("[ERR]: Failed to upload file :(")
-    }
-
-    setStatusText("Converting to image...");
-    // Get the resume as a picture
+    // Keep PDF conversion client-side because it is independent of the
+    // future AI and storage providers. The generated image can later be
+    // passed to the AI service or uploaded alongside the original PDF.
     const imageFile = await convertPdfToImage(file);
 
-    if (!imageFile?.file) {
-      setIsProcessing(false)
-      return setStatusText("[ERR]: Failed to convert PDF to image :(")
+    if (!imageFile.file) {
+      setIsProcessing(false);
+      setStatusText("[ERR]: Failed to convert PDF to image.");
+      return;
     }
 
-    setStatusText("Uploading image...");
-    // Upload the img to puter storage
-    const uploadedImage = await fs.upload([imageFile.file])
+    // TODO: Save `file` and `imageFile.file` using the selected storage provider.
+    // TODO: Send the resume content/image plus job details to the Ollama backend.
+    // TODO: Save the returned feedback and navigate to `/resume/:id`.
+    setStatusText(
+      "Resume prepared. AI analysis and storage are not connected yet."
+    );
+    setIsProcessing(false);
+  };
 
-    if (!uploadedImage) {
-      setIsProcessing(false)
-      return setStatusText("[ERR]: Failed to upload image :(")
-    }
-
-    setStatusText("Preparing data...")
-
-    // generate new unique id for this instance
-    const uuid = generateUUID();
-
-    // Format the data
-    const data = {
-      id: uuid,
-      resumePath: uploadedFile.path,
-      imagePath: uploadedImage.path,
-      companyName,
-      jobTitle,
-      jobDescription,
-      feedback: {},
-    };
-
-    // Store in puter
-    await kv.set(`resume:${uuid}`, JSON.stringify(data))
-
-    setStatusText("Analyzing...")
-
-    // Use puter ai for the resume feedback
-    const feedback = await ai.feedback(
-      uploadedImage.path,
-      prepareInstructions({ jobTitle, jobDescription }) // use the prepared instructions to give to the ai
-    )
-
-    if (!feedback) {
-      setIsProcessing(false)
-      return setStatusText("[ERR]: Failed to analyze resume :(")
-    }
-
-    // Get the actual feedback text from the ai response
-    const feedbackText = typeof feedback.message.content === "string"
-      ? feedback.message.content
-      : feedback.message.content[0];
-
-    // Update the data with the feedback
-    data.feedback = JSON.parse(feedbackText)
-    await kv.set(`resume:${uuid}`, JSON.stringify(data))
-
-    setStatusText("Analysis complete, redirecting...")
-
-    // console.log(data);
-    navigate(`/resume/${uuid}`);
-  }
-
-  const handleSubmit = (async (e: FormEvent<HTMLFormElement>) => {
-    // Prevent the default form submission behavior (refreshing the page)
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Get access to the form element
-    const form = e.currentTarget.closest("form")
-    if (!form) return;
-
-    // Get the form data
-    const formData = new FormData(form);
-
-    const companyName = formData.get("company-name") as string;
-    const jobTitle = formData.get("job-title") as string;
-    const jobDescription = formData.get("job-description") as string;
 
     if (!file) {
       alert("[ERR]: Please upload a resume file before submitting.");
@@ -128,18 +45,13 @@ const upload = () => {
     }
 
     try {
-      await handleAnalyze({
-        companyName,
-        jobTitle,
-        jobDescription,
-        file,
-      });
+      await handleAnalyze({ file });
     } catch (error) {
-      console.error("Analysis failed:", error);
-      setStatusText("[ERR]: Resume analysis failed. Please try again.");
+      console.error("Resume preparation failed:", error);
+      setStatusText("[ERR]: Resume preparation failed. Please try again.");
       setIsProcessing(false);
     }
-  })
+  };
 
   return (
     <main className="bg-[url('/images/bg-main.svg')] bg-cover">
@@ -196,7 +108,7 @@ const upload = () => {
         </div>
       </section>
     </main>
-  )
-}
+  );
+};
 
-export default upload
+export default Upload;
