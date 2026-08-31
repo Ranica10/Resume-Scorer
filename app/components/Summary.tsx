@@ -1,3 +1,4 @@
+import ScoreBadge from "./ScoreBadge";
 import ScoreGauge from "./ScoreGauge"
 
 // Different categories of resume feedback with their respective scores
@@ -13,6 +14,7 @@ const Category = ({ title, score }: { title: string, score: number }) => {
             <div className="category">
                 <div className="flex flex-row gap-2 items-center justify-center">
                     <p className="text-2xl">{title}</p>
+                    <ScoreBadge score={score} />
                 </div>
                 <p className="text-2xl">
                     {/* The score is displayed in a color that indicates its level */}
