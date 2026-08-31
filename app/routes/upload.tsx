@@ -8,6 +8,9 @@ import {
   Show,
 } from "@clerk/react-router";
 
+import { useSession, useUser } from "@clerk/react-router";
+import { createClerkSupabaseClient } from "~/lib/supabase";
+
 function UploadPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
