@@ -12,6 +12,9 @@ import { useSession, useUser } from "@clerk/react-router";
 import { createClerkSupabaseClient } from "~/lib/supabase";
 
 function UploadPage() {
+  const { user } = useUser();
+  const { session } = useSession();
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -20,28 +23,89 @@ function UploadPage() {
     setFile(selectedFile);
   };
 
-  const handleAnalyze = async ({ file }: { file: File }) => {
+  const handleAnalyze = async ({
+    companyName,
+    jobTitle,
+    jobDescription,
+  }: {
+    companyName: string;
+    jobTitle: string;
+    jobDescription: string;
+  }) => {
+    if (!file || !user || !session) return;
+
     setIsProcessing(true);
     setStatusText("Preparing resume...");
 
-    // Keep PDF conversion client-side because it is independent of the
-    // future AI and storage providers. The generated image can later be
-    // passed to the AI service or uploaded alongside the original PDF.
+    // Create supabase client
+    const supabase = createClerkSupabaseClient(() =>
+      session.getToken()
+    );
+
+    // new uuid for each resume
+    const resumeId = crypto.randomUUID();
+
+    // File pathes for the current resume
+    const resumePath = `${user.id}/${resumeId}.pdf`;
+    const imagePath = `${user.id}/${resumeId}.png`;
+
+    // Upload the resume to the resumes bucket in supabase
+    const { error: resumeUploadError } = await supabase.storage
+      .from("resumes")
+      .upload(resumePath, file, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (resumeUploadError) {
+      throw resumeUploadError;
+    }
+
+    setStatusText("Creating image...");
+
     const imageFile = await convertPdfToImage(file);
 
     if (!imageFile.file) {
-      setIsProcessing(false);
-      setStatusText("[ERR]: Failed to convert PDF to image.");
-      return;
+      throw new Error("Could not generate resume preview");
     }
 
-    // TODO: Save `file` and `imageFile.file` using the selected storage provider.
-    // TODO: Send the resume content/image plus job details to the Ollama backend.
-    // TODO: Save the returned feedback and navigate to `/resume/:id`.
-    setStatusText(
-      "Resume prepared. AI analysis and storage are not connected yet."
-    );
-    setIsProcessing(false);
+    // Upload the image of the resume to the resume-images bucket in supabase
+    const { error: imageUploadError } = await supabase.storage
+      .from("resume-images")
+      .upload(imagePath, imageFile.file, {
+        contentType: "image/png",
+        upsert: false,
+      });
+
+    if (imageUploadError) {
+      throw imageUploadError;
+    }
+
+    setStatusText("Saving resume...");
+
+    // Save the resume into the table with its relevant info
+    const { data: resume, error: insertError } = await supabase
+      .from("resumes")
+      .insert({
+        id: resumeId,
+
+        user_id: user.id,
+
+        company_name: companyName,
+        job_title: jobTitle,
+        job_description: jobDescription,
+
+        resume_path: resumePath,
+        image_path: imagePath,
+
+        feedback: null, // later w/ ollama
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      throw insertError;
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
