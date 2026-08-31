@@ -7,6 +7,12 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import { ClerkProvider } from "@clerk/react-router";
+import {
+  clerkMiddleware,
+  rootAuthLoader,
+} from "@clerk/react-router/server";
+
 import type { Route } from "./+types/root";
 import "./app.css";
 
@@ -22,6 +28,13 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export const middleware: Route.MiddlewareFunction[] = [
+  clerkMiddleware(),
+];
+
+export const loader = (args: Route.LoaderArgs) =>
+  rootAuthLoader(args);
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -41,8 +54,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
-  return <Outlet />;
+export default function App({ loaderData }: Route.ComponentProps) {
+  return (
+    <ClerkProvider loaderData={loaderData}>
+      <Outlet />
+    </ClerkProvider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

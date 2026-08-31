@@ -3,7 +3,12 @@ import FileUploader from "~/components/FileUploader";
 import Navbar from "~/components/Navbar";
 import { convertPdfToImage } from "~/lib/pdf2img";
 
-const Upload = () => {
+import {
+  RedirectToSignIn,
+  Show,
+} from "@clerk/react-router";
+
+function UploadPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -111,4 +116,16 @@ const Upload = () => {
   );
 };
 
-export default Upload;
+export default function Upload() {
+  return (
+    <>
+      <Show when="signed-out">
+        <RedirectToSignIn />
+      </Show>
+
+      <Show when="signed-in">
+        <UploadPage />
+      </Show>
+    </>
+  );
+}
