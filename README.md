@@ -1,87 +1,75 @@
-# Welcome to React Router!
+# Resume Scorer
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Resume Scorer is an AI-powered web application that analyzes a user’s resume against a target job description and provides structured feedback, ATS scoring, and improvement suggestions.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+Users can securely sign in, upload a PDF resume, receive AI-generated feedback, and revisit their previous resume analyses from a personal dashboard.
+
+<img width="1297" height="776" alt="Screenshot 2026-09-01 015506" src="https://github.com/user-attachments/assets/235fcb84-d24b-40b5-9a1f-c2b5bba3e17f" />
+
+## Deployment
+Live demo: https://resume-scorer-zeta.vercel.app/
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- Secure authentication with Clerk
+- PDF resume upload
+- Resume preview generation
+- PDF-to-text extraction
+- AI-powered resume analysis with Google Gemini
+- ATS score and improvement suggestions
+- Private resume storage with Supabase Storage
+- Resume metadata and feedback stored in Supabase Postgres
 
-## Getting Started
+## Tech Stack
 
-### Installation
+### Frontend
 
-Install the dependencies:
+- React
+- React Router
+- TypeScript
+- Tailwind CSS
 
-```bash
-npm install
+### Authentication
+
+- Clerk
+
+### Database and Storage
+
+- Supabase Postgres
+- Supabase Storage
+
+### AI
+
+- Google Gemini API
+- `@google/genai`
+
+### PDF Processing
+
+- `pdfjs-dist`
+
+## How It Works
+
+```text
+User
+  ↓
+Clerk Authentication
+  ↓
+Upload PDF Resume
+  ↓
+┌─────────────────────────────┐
+│                             │
+▼                             ▼
+Supabase Storage        PDF Text Extraction
+PDF + Preview Image            │
+                               ▼
+                        Gemini Analysis
+                               │
+                               ▼
+                        Structured Feedback
+                               │
+                               ▼
+                        Supabase Database
+                               │
+                               ▼
+                       Resume Review Page
 ```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
