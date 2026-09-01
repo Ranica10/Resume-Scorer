@@ -11,12 +11,12 @@ const ScoreBadge = ({ score }: { score: number }) => {
   return (
     <div
       className={cn(
-        "flex flex-row gap-1 items-center px-2 py-0.5 rounded-[96px]",
+        "flex flex-row gap-1 items-center px-2 py-0.5 rounded-sm border",
         score > 69
-          ? "bg-badge-green"
+          ? "bg-badge-green border-moss/30"
           : score > 39
-          ? "bg-badge-yellow"
-          : "bg-badge-red"
+          ? "bg-badge-yellow border-badge-yellow-text/20"
+          : "bg-badge-red border-rust/30"
       )}
     >
       <img
@@ -50,7 +50,7 @@ const CategoryHeader = ({
 }) => {
   return (
     <div className="flex flex-row gap-4 items-center py-2">
-      <p className="text-2xl font-semibold">{title}</p>
+      <p className="text-2xl font-serif font-medium text-ink">{title}</p>
       <ScoreBadge score={categoryScore} />
     </div>
   );
@@ -64,7 +64,7 @@ const CategoryContent = ({
 }) => {
   return (
     <div className="flex flex-col gap-4 items-center w-full">
-      <div className="bg-gray-50 w-full rounded-lg px-5 py-4 grid grid-cols-2 gap-4">
+      <div className="bg-paper w-full rounded-sm border border-line px-5 py-4 grid grid-cols-2 gap-4">
         {/* Grid of tips */}
         {tips.map((tip, index) => (
           <div className="flex flex-row gap-2 items-center" key={index}>
@@ -75,7 +75,7 @@ const CategoryContent = ({
               alt="score"
               className="size-5"
             />
-            <p className="text-xl text-gray-500 ">{tip.tip}</p>
+            <p className="text-lg text-ink-soft">{tip.tip}</p>
           </div>
         ))}
       </div>
@@ -86,10 +86,10 @@ const CategoryContent = ({
           <div
             key={index + tip.tip}
             className={cn(
-              "flex flex-col gap-2 rounded-2xl p-4",
+              "flex flex-col gap-2 rounded-sm p-4 border",
               tip.type === "good"
-                ? "bg-green-50 border border-green-200 text-green-700"
-                : "bg-yellow-50 border border-yellow-200 text-yellow-700"
+                ? "bg-badge-green/50 border-moss/30 text-moss-dark"
+                : "bg-badge-yellow/50 border-badge-yellow-text/20 text-badge-yellow-text"
             )}
           >
             <div className="flex flex-row gap-2 items-center">
@@ -102,7 +102,7 @@ const CategoryContent = ({
                 alt="score"
                 className="size-5"
               />
-              <p className="text-xl font-semibold">{tip.tip}</p>
+              <p className="text-lg font-medium">{tip.tip}</p>
             </div>
             <p>{tip.explanation}</p>
           </div>

@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <Link to="/">
-        <p className="text-2xl font-bold text-gradient">Resume Scorer</p>
+        <p className="text-2xl font-serif font-medium text-gradient">Resume Scorer</p>
       </Link>
       
       <div className="flex flex-row gap-8">

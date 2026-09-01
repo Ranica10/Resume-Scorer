@@ -180,7 +180,7 @@ function UploadPage() {
   };
 
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+    <main className="bg-paper min-h-screen">
       <Navbar />
 
       <section className="main-section">

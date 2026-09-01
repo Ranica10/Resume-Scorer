@@ -126,21 +126,21 @@ const Resume = () => {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
-        <h2>Loading resume...</h2>
+      <main className="min-h-screen flex items-center justify-center bg-paper">
+        <h2 className="text-ink-soft">Loading resume...</h2>
       </main>
     );
   }
 
   if (error || !resume) {
     return (
-      <main className="min-h-screen flex items-center justify-center p-8">
+      <main className="min-h-screen flex items-center justify-center bg-paper">
         <div className="flex flex-col gap-4 text-center">
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-4xl font-serif font-medium text-ink">
             Resume not found
           </h1>
 
-          <p>
+          <p className="text-ink-soft">
             {error || "Could not find this resume."}
           </p>
 
@@ -167,7 +167,7 @@ const Resume = () => {
             className="w-2.5 h-2.5"
           />
 
-          <span className="text-gray-800 text-sm font-semibold">
+          <span className="text-ink text-sm font-medium">
             Back to Homepage
           </span>
         </Link>
@@ -176,7 +176,7 @@ const Resume = () => {
       <div className="flex flex-row w-full max-lg:flex-col-reverse">
 
         {/* Resume preview */}
-        <section className="feedback-section bg-[url('/images/bg_small.svg')] bg-cover h-[100vh] sticky top-0 items-center justify-center">
+        <section className="feedback-section bg-paper h-[100vh] sticky top-0 items-center justify-center border-r border-line">
           <div className="animate-in fade-in duration-1000 gradient-border max-sm:m-0 h-[90%] max-wxl:h-fit w-fit">
 
             <a
@@ -186,7 +186,7 @@ const Resume = () => {
             >
               <img
                 src={imageUrl}
-                className="w-full h-full object-contain rounded-2xl"
+                className="w-full h-full object-contain rounded-sm"
                 title="resume"
                 alt="Resume preview"
               />
@@ -197,7 +197,7 @@ const Resume = () => {
 
         {/* Feedback */}
         <section className="feedback-section">
-          <h2 className="text-4xl !text-black font-bold">
+          <h2 className="text-4xl !text-ink font-serif font-medium">
             Resume Review
           </h2>
 

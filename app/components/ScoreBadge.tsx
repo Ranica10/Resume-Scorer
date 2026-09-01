@@ -7,10 +7,10 @@ const ScoreBadge = ({ score }: { score: number }) => {
       : "bg-badge-red";
   const textColor =
     score > 69
-      ? "text-green-600"
+      ? "text-badge-green-text"
       : score > 49
-      ? "text-yellow-600"
-      : "text-red-600";
+      ? "text-badge-yellow-text"
+      : "text-badge-red-text";
   const badgeText =
     score > 69 ? "Strong" : score > 49 ? "Good Start" : "Needs Work";
 

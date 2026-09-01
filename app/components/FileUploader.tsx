@@ -42,8 +42,8 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
                             <div className="flex items-center space-x-3">
                                 <div>
                                     {/* File info */}
-                                    <p className="text-sm font-medium text-gray-700 truncate max-w-xs">{file.name}</p>
-                                    <p className="text-sm text-gray-500">{formatSize(file.size)}</p>
+                                    <p className="text-sm font-medium text-ink truncate max-w-xs">{file.name}</p>
+                                    <p className="text-sm text-ink-soft">{formatSize(file.size)}</p>
                                 </div>
                             </div>
 
@@ -60,10 +60,10 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
                             <div className="mx-auto w-16 h-16 flex items-center justify-center">
                                 <img src="/icons/info.svg" alt="upload" className="size-20 mb-2"/>
                             </div>
-                            <p className="text-lg text-gray-500">
-                                <span className="font-semibold">Click to upload</span> or drag and drop
+                            <p className="text-lg text-ink-soft">
+                                <span className="font-semibold text-ink">Click to upload</span> or drag and drop
                             </p>
-                            <p className="text-med text-gray-500">PDF (max {formatSize(maxFileSize)})</p>
+                            <p className="text-med text-ink-soft">PDF (max {formatSize(maxFileSize)})</p>
                         </div>
                     )}
                 </div>

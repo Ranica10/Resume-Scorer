@@ -30,11 +30,11 @@ const ResumeCard = ({
       <div className="resume-card-header">
         {/* Info */}
         <div className="flex flex-col gap-2">
-          <h2 className="!text-black font-bold break-words">
+          <h2 className="!text-ink font-serif font-medium break-words text-xl">
             {company_name || "Unknown Company"}
           </h2>
 
-          <h3 className="text-lg break-words text-gray-500">
+          <h3 className="text-lg break-words text-ink-soft">
             {job_title || "Unknown Position"}
           </h3>
         </div>
@@ -55,8 +55,8 @@ const ResumeCard = ({
               className="w-full h-[350px] max-sm:h-[200px] object-cover object-top"
             />
           ) : (
-            <div className="w-full h-[350px] max-sm:h-[200px] flex items-center justify-center bg-gray-100">
-              <p className="text-gray-500">No preview available</p>
+            <div className="w-full h-[350px] max-sm:h-[200px] flex items-center justify-center bg-paper">
+              <p className="text-ink-soft">No preview available</p>
             </div>
           )}
         </div>

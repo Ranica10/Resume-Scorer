@@ -128,7 +128,7 @@ export default function Home() {
   }, [user, session]);
 
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover min-h-screen">
+    <main className="bg-paper min-h-screen">
       <Navbar />
 
       <section className="main-section">
@@ -139,13 +139,13 @@ export default function Home() {
 
         {isLoading && (
           <div className="text-center">
-            <p>Loading resumes...</p>
+            <p className="text-ink-soft">Loading resumes...</p>
           </div>
         )}
 
         {error && (
           <div className="text-center">
-            <p className="text-red-500">{error}</p>
+            <p className="text-rust">{error}</p>
           </div>
         )}
 
@@ -162,7 +162,7 @@ export default function Home() {
 
         {!isLoading && !error && resumes.length === 0 && (
           <div className="text-center">
-            <p>No resumes uploaded yet.</p>
+            <p className="text-ink-soft">No resumes uploaded yet.</p>
           </div>
         )}
       </section>
