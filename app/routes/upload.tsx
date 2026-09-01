@@ -10,8 +10,6 @@ import {
 import { useSession, useUser } from "@clerk/react-router";
 import { createClerkSupabaseClient } from "~/lib/supabase";
 
-import { GoogleGenAI } from "@google/genai";
-
 import { prepareInstructions } from "~/constants";
 import { convertPdfToImage, convertPdfToText } from "~/lib/pdf";
 import { useNavigate } from "react-router";
@@ -102,20 +100,29 @@ function UploadPage() {
     // Analyze the resume with gemini-3.1-flash-lite and get feedback
     setStatusText("Analyzing resume...");
 
-    const ai = new GoogleGenAI({
-      apiKey: import.meta.env.VITE_GEMINI_API_KEY,
-    });
-
-    const interaction = await ai.interactions.create({
-      model: "gemini-3.1-flash-lite",
-      input: prepareInstructions({
+    // Call the /api/analyze route to analyze the resume and get feedback
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         jobTitle,
         jobDescription,
-        resumeText
+        resumeText,
       }),
     });
 
-    const feedback = JSON.parse(interaction.output_text || "{}");
+    if (!response.ok) {
+      const errorData = await response.json();
+
+      throw new Error(
+        errorData.error || "Failed to analyze resume"
+      );
+    }
+
+    // Get the feedback from the response
+    const { feedback } = await response.json();
 
     // console.log("Feedback received:", feedback);
 
